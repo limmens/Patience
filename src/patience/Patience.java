@@ -8,7 +8,6 @@ package patience;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Scanner;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -17,13 +16,12 @@ import javax.swing.*;
  */
 public class Patience extends JFrame implements MouseListener
 {
-    final private static int nKolommen = 7;
-    private static Kolom[] kolommen = new Kolom[7];
     private static TrekStapel trekStapel;
     private static AflegStapel aflegStapel;
     private static EindStapel[] eindStapels = new EindStapel[4];
     
-    private static Scanner scanner = new Scanner(System.in);
+    final private static int nKolommen = 7;
+    private static Kolom[] kolommen = new Kolom[7];
     
     JPanel holdsAll;
     JPanel stapelPanel;
