@@ -16,7 +16,7 @@ public class EindStapel extends Stapel
     private String kleur;
     private Kaart bovensteKaart;
     
-    public EindStapel(String kleur, ActionListener al)
+    public EindStapel(String kleur)
     {
         this.kleur = kleur;
         nKaarten = 0;
