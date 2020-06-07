@@ -17,36 +17,29 @@ import java.util.Random;
  */
 public class TrekStapel extends Stapel
 {
-    
-    //daadwerkelijke stapel kaarten
-    
-    private Kaart legeKaart;
-    
     public TrekStapel()
     {
+        nKaarten = Deck.getNKaarten();
         
-        nKaarten = Deck.getNKleuren() * Deck.getNWaarden();
         
         for(int i = 0; i < Deck.getNKleuren(); i++)
-        {
             for(int j = 0; j < Deck.getNWaarden(); j++)
-            {
-                
                 kaarten[i * 13 + j] = new Kaart(Deck.getKleuren()[i], Deck.getWaarden()[j], false);
-                
-            }
-        }
         
         schudStapel(52);
+        
         bovensteKaart = kaarten[nKaarten-1];
-        this.add(bovensteKaart);
-        bovensteKaart.setPreferredSize(Deck.getCardDimension());
+        
+        //this.add(bovensteKaart);
     }
     
+    //stapel wordt n keer geschud: dit betekent dat n keer een random kaart van plaats wisselt met een andere random kaart
     private void schudStapel(int n)
     {
         Random random = new Random();
         Kaart reserve;
+        
+        System.out.println("nKaarten voor schudden: " + nKaarten);
         
         for(int i = 0; i < n; i++)
         {
@@ -56,8 +49,28 @@ public class TrekStapel extends Stapel
             kaarten[r1] = kaarten[r2];
             kaarten[r2] = reserve;
         }
+        
+        System.out.println("nKaarten na schudden: " + nKaarten);
     }
     
+    //haalt kaart van de stapel en geeft deze terug met een return
+    public Kaart trekKaart()
+    {
+        Kaart getrokken = bovensteKaart;
+        
+        nKaarten--; 
+        
+        if(nKaarten > 0)
+        {
+            bovensteKaart = kaarten[nKaarten - 1];
+            this.add(bovensteKaart);
+        }
+        else
+            this.setVisible(false);
+        return getrokken;
+    }
+    
+    //pakt meerdere kaarten, nog geen effect op GUI
     public Kaart[] pakKaarten (int n)
     {
         Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
@@ -70,17 +83,7 @@ public class TrekStapel extends Stapel
         return gepakt;
     }
     
-    public Kaart trekKaart()
-    {
-        Kaart getrokken = bovensteKaart;
-        this.remove(bovensteKaart);
-        kaarten[nKaarten - 1] = null;
-        bovensteKaart = kaarten[nKaarten - 2];
-        nKaarten--;   
-        bovensteKaart.verversKaart();
-        this.add(bovensteKaart);
-        return getrokken;
-    }
+    
 
     
     

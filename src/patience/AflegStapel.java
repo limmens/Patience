@@ -18,8 +18,10 @@ public class AflegStapel extends Stapel
         addKaart(k);
     }
     
+    //voegt kaart toe aan aflegstapel en draait hem open
     public void addKaart(Kaart k)
     {
+        k.setVisible(true);
         if(nKaarten > 0)
             bovensteKaart.setVisible(false);
             

@@ -13,10 +13,12 @@ import java.awt.Dimension;
  */
 public final class Deck
 {
-    protected static final String[] kleuren = {"C","D","S","H"};
-    protected static final int nKleuren = kleuren.length;
-    protected static final String[] waarden = {"A", "2", "3", "4", "5", "6", "7", "8", "9","10","J", "Q", "K"};
-    protected static final int nWaarden = waarden.length;
+    private static final String[] kleuren = {"C","D","S","H"};
+    private static final int nKleuren = kleuren.length;
+    private static final String[] waarden = {"A", "2", "3", "4", "5", "6", "7", "8", "9","10","J", "Q", "K"};
+    private static final int nWaarden = waarden.length;
+    
+    private static final int nKaarten = nKleuren * nWaarden;
     
     private static int cardWidth = 150;
     private static int cardHeight = 250;
@@ -62,7 +64,10 @@ public final class Deck
         return nWaarden;
     }
     
-    
+    static public int getNKaarten()
+    {
+        return nKaarten;
+    }
     
     public static boolean preciesEenWaardeHoger(Kaart k1, Kaart k2)
     {
