@@ -27,7 +27,7 @@ public class Patience extends JFrame implements MouseListener
     JPanel stapelPanel;
     JPanel kolomPanel;
     
-    Dimension stapelPanelDimension = new Dimension (Deck.getCardWidth() * 2, Deck.getCardHeight() * 2);
+    Dimension stapelPanelDimension = new Dimension (Deck.getCardWidth() * 2 + 50, Deck.getCardHeight() + 50);
     
     JTextArea kolomText;
     
@@ -42,17 +42,18 @@ public class Patience extends JFrame implements MouseListener
         
         BorderLayout totalLayout = new BorderLayout();
         FlowLayout stapelPanelLayout = new FlowLayout();
+        stapelPanelLayout.setAlignment(FlowLayout.LEFT);
         
         stapelPanel = new JPanel();
         stapelPanel.setLayout(stapelPanelLayout);
         stapelPanel.add(trekStapel);
+        trekStapel.setLocation(50, 50);
+        trekStapel.setVisible(true);
         
         kolomText = new JTextArea();
         
         kolomPanel = new JPanel();
         kolomPanel.add(kolomText);
-        
-        draaiKaart();
 
         //panels toevoegen
         holdsAll = new JPanel();
@@ -66,43 +67,41 @@ public class Patience extends JFrame implements MouseListener
         stapelPanel.setPreferredSize(stapelPanelDimension);
         kolomPanel.setBackground(Color.red);
         
-        
-        /*
-        //kolommen initialiseren
-        vulKolommen();
-        
         //eindstapels initialiseren
+        eindStapels = new EindStapel[Deck.getNKleuren()];
         for(int i = 0; i < Deck.getNKleuren(); i++)
         {
-            eindStapels[i] = new EindStapel(Deck.getKleuren()[i],this);
+            eindStapels[i] = new EindStapel(Deck.getKleuren()[i]);
         }
-        */
-        //do
-        //{
-        //}
-        //while(interactie() && trekStapel.getNKaarten() > 0 && aflegStapel.getNKaarten() > 0);
+        
+        //kolommen initialiseren
+        vulKolommen();
+                
+        draaiKaart();
     }
     
+    //haalt kaart van de trekstapel en legt hem op de aflegstapel
     private void draaiKaart()
     {
-        nGedraaid++;
-        
-        Kaart getrokken = trekStapel.trekKaart();
-        
-        
-        if(aflegStapel == null)
-        {
-            aflegStapel = new AflegStapel(getrokken);
-            aflegStapel.addMouseListener(this);
-            stapelPanel.add(aflegStapel);
-        }
-        else
-        {
-            aflegStapel.addKaart(getrokken);
-            kolomText.setText("getrokken kaart nr. " + nGedraaid + ": " + getrokken.getKleur() + " " + getrokken.getWaarde() + 
-                    "\ntrekstapel:" + trekStapel.getBovensteKaart().getKleur() + " " + trekStapel.getBovensteKaart().getWaarde() +
-                    "\naflegstapel: " + aflegStapel.getBovensteKaart());
-        }
+            nGedraaid++;
+
+            Kaart getrokken = trekStapel.trekKaart();
+
+            if(aflegStapel == null)
+            {
+                aflegStapel = new AflegStapel(getrokken);
+                aflegStapel.addMouseListener(this);
+                stapelPanel.add(aflegStapel);
+                aflegStapel.setVisible(true);
+                aflegStapel.setLocation(Deck.getCardWidth() + 200, 50);
+            }
+            else
+            {
+                aflegStapel.addKaart(getrokken);
+            }
+            //kolomText.setText("getrokken kaart nr. " + nGedraaid + ": " + getrokken.getKleur() + " " + getrokken.getWaarde() + 
+            //            "\ntrekstapel:" + trekStapel.getBovensteKaart().getKleur() + " " + trekStapel.getBovensteKaart().getWaarde() +
+            //            "\naflegstapel: " + aflegStapel.getBovensteKaart());
     }
     
     private static void vulKolommen()
@@ -153,125 +152,14 @@ public class Patience extends JFrame implements MouseListener
     {
         if(e.getSource() == trekStapel)
         {
-            kolomText.setText("trekstapel aangeklikt");
             draaiKaart();
         }
         if(e.getSource() == aflegStapel)
         {
-            kolomText.setText("aflegstapel aangeklikt");
+            //kolomText.setText("aflegstapel aangeklikt");
         }
         
-        trekStapel.ververs();
-        aflegStapel.ververs();
     }
-    
-    /*
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if(e.getSource() == trekStapel.getBovensteKaart())
-        {
-            kolomText.setText("trekstapel aangeklikt");
-            draaiKaart();
-            //trekStapel.getBovensteKaart().setZichtbaar(true);
-            //trekStapel.getBovensteKaart().verversKaart();
-            //aflegStapel.legAf(trekStapel.draaiKaart());
-            //aflegStapel.getBovensteKaart().verversKaart();
-        }
-        if(e.getSource() == aflegStapel.getBovensteKaart())
-        {
-            kolomText.setText("aflegstapel aangeklikt");
-            //aflegStapel.legAf(trekStapel.draaiKaart());
-            //aflegStapel.getBovensteKaart().verversKaart();
-            //aflegStapel.getBovensteKaart().setText("hallo");
-        }
-    }
-    */
-    
-    /*
-        private static void printTafel()
-    {
-        System.out.println("Trekstapel:");
-        trekStapel.printStapel();
-        
-        System.out.println("AflegStapel:");
-        aflegStapel.printStapel();        
-        
-        for(int i = 0; i < nKolommen; i++)
-        {
-            kolommen[i].printKolom();            
-        }
-        
-        System.out.println("Eindstapels:");
-        for(int i = 0; i < Deck.getNKleuren(); i++)
-        {
-            eindStapels[i].printStapel();
-        }
-    }
-    */
-    
-    /*
-    public static boolean interactie()
-    {
-        String input = "";
-        int intInput = 99;
-        String inputVan;
-        String inputNaar;
-        String inputN;
-        int intVan = 99;
-        int intNaar = 99;
-        int intN = 0;
-        
-        System.out.println("Kies getal:\n"
-            + "\nT: Trek kaart"
-            + "\nV: Verplaats kaart"
-            + "\nE: EXIT"
-        );
-        input = scanner.next();
-
-        if(input.contains("E"))
-        {
-            return false;
-        }
-        else if(input.equals("T"))
-        {
-            aflegStapel.legAf(trekStapel.draaiKaart());
-            return true;
-        }
-        else if(input.equals("V"))
-        {
-            System.out.println("Toets drie getallen in voor verplaatsing van de kaart (voorbeeld: 421): "
-                + "\n\nVan: kolomnummer of 9 voor aflegstapel"
-                + "\n\nNaar: kolomnummer of 9 voor eindstapel"
-                + "\n\nHoeveel kaarten?"
-                + "\n0: EXIT"
-            );
-            inputVan = scanner.next();
-            inputNaar = scanner.next();
-            inputN = scanner.next();
-
-            try
-            {
-                // the String to int conversion happens here
-                intVan = Integer.parseInt(inputVan.trim());
-                intNaar = Integer.parseInt(inputNaar.trim());
-                intN = Integer.parseInt(inputN.trim());
-            }
-
-            catch (NumberFormatException nfe)
-            {
-                System.out.println("Input is geen getal!");
-            }
-            
-            if(intVan == 0)
-                return false;
-            else if(intNaar == 9)
-                
-            return true;
-        }
-     return true;       
-    }
-*/
 
     @Override
     public void mouseClicked(MouseEvent e)
@@ -296,4 +184,28 @@ public class Patience extends JFrame implements MouseListener
     {
         
     }
+    
+    
+    /*
+        private static void printTafel()
+    {
+        System.out.println("Trekstapel:");
+        trekStapel.printStapel();
+        
+        System.out.println("AflegStapel:");
+        aflegStapel.printStapel();        
+        
+        for(int i = 0; i < nKolommen; i++)
+        {
+            kolommen[i].printKolom();            
+        }
+        
+        System.out.println("Eindstapels:");
+        for(int i = 0; i < Deck.getNKleuren(); i++)
+        {
+            eindStapels[i].printStapel();
+        }
+    }
+    */
+    
 }
