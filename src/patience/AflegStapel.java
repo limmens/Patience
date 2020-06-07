@@ -5,8 +5,6 @@
  */
 package patience;
 
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 
 /**
  *
@@ -20,28 +18,17 @@ public class AflegStapel extends Stapel
         addKaart(k);
     }
     
-    public void legAf(Kaart k)
-    {
-        
-        
-    }
-
     public void addKaart(Kaart k)
     {
-        if(nKaarten > 0 )
-            this.remove(bovensteKaart);
+        if(nKaarten > 0)
+            bovensteKaart.setVisible(false);
+            
         bovensteKaart = k;
         kaarten[nKaarten] = k;
         
-            this.add(bovensteKaart);
-            //this.remove(bovensteKaart);
-        
-        //{
-            //this.add(bovensteKaart);
-            //bovensteKaart.setPreferredSize(bovensteKaart.getCardDimension());
-        //}
         bovensteKaart.setZichtbaar(true);
         bovensteKaart.verversKaart();
+        this.add(bovensteKaart);
         
         nKaarten++;
     }
