@@ -26,13 +26,6 @@ public class Stapel extends JPanel
     {
         kaarten = new Kaart[Deck.getNKleuren() * Deck.getNWaarden()];
         
-        
-    }
-    
-    protected void ververs()
-    {
-        bovensteKaart.verversKaart();
-        this.add(bovensteKaart);
     }
     
     public int getNKaarten()
@@ -45,6 +38,10 @@ public class Stapel extends JPanel
         return bovensteKaart;
     }
     
+    
+    
+    
+    //print stapel zonder GUI
     public void printStapel()
     {
         if(nKaarten == 0)
