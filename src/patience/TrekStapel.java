@@ -21,7 +21,6 @@ public class TrekStapel extends Stapel
     {
         nKaarten = Deck.getNKaarten();
         
-        
         for(int i = 0; i < Deck.getNKleuren(); i++)
             for(int j = 0; j < Deck.getNWaarden(); j++)
                 kaarten[i * 13 + j] = new Kaart(Deck.getKleuren()[i], Deck.getWaarden()[j], false);
@@ -39,8 +38,6 @@ public class TrekStapel extends Stapel
         Random random = new Random();
         Kaart reserve;
         
-        System.out.println("nKaarten voor schudden: " + nKaarten);
-        
         for(int i = 0; i < n; i++)
         {
             int r1 = random.nextInt(52);
@@ -49,8 +46,6 @@ public class TrekStapel extends Stapel
             kaarten[r1] = kaarten[r2];
             kaarten[r2] = reserve;
         }
-        
-        System.out.println("nKaarten na schudden: " + nKaarten);
     }
     
     //haalt kaart van de stapel en geeft deze terug met een return
