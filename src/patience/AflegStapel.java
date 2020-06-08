@@ -12,10 +12,10 @@ package patience;
  */
 public class AflegStapel extends Stapel
 {
-    public AflegStapel(Kaart k)
+    public AflegStapel()//Kaart k)
     {
         nKaarten = 0;
-        addKaart(k);
+        //addKaart(k);
     }
     
     //voegt kaart toe aan aflegstapel en draait hem open
