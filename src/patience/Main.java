@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author Gebruiker
+ * @author Loes Immens
  */
 public class Main
 {
