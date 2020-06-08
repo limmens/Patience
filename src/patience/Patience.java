@@ -23,84 +23,91 @@ public class Patience extends JFrame implements MouseListener
     private static Kolom[] kolommen = new Kolom[7];
     
     JPanel holdsAll;
-    JPanel stapelPanel;
+    JPanel stapelPanelTotaal;
+    JPanel stapelPanelLinks;
+    JPanel stapelPanelRechts;
     JPanel kolomPanel;
     
     Dimension stapelPanelDimension = new Dimension (Deck.getCardWidth() * 2 + 50, Deck.getCardHeight() + 50);
     
     JTextArea kolomText;
     
-    private int nGedraaid;
     
     public Patience()
     {
-        nGedraaid = 0;
-        
         trekStapel = new TrekStapel();
         trekStapel.addMouseListener(this);
-        
-        BorderLayout totalLayout = new BorderLayout();
-        FlowLayout stapelPanelLayout = new FlowLayout();
-        stapelPanelLayout.setAlignment(FlowLayout.LEFT);
-        
-        stapelPanel = new JPanel();
-        stapelPanel.setLayout(stapelPanelLayout);
-        stapelPanel.add(trekStapel);
         trekStapel.setLocation(50, 50);
         trekStapel.setVisible(true);
         
-        kolomText = new JTextArea();
+        BorderLayout totalLayout = new BorderLayout();
+        FlowLayout stapelPanelLLayout = new FlowLayout();
+        FlowLayout stapelPanelRLayout = new FlowLayout();
+        BorderLayout stapelPanelTLayout = new BorderLayout();
         
-        kolomPanel = new JPanel();
-        kolomPanel.add(kolomText);
-
-        //panels toevoegen
-        holdsAll = new JPanel();
-        holdsAll.setLayout(totalLayout);
-        this.add(holdsAll);
+        stapelPanelLLayout.setAlignment(FlowLayout.LEFT);
+        stapelPanelRLayout.setAlignment(FlowLayout.RIGHT);
         
-        holdsAll.add(stapelPanel, BorderLayout.NORTH);
-        holdsAll.add(kolomPanel, BorderLayout.CENTER);
+        stapelPanelLinks = new JPanel();
+        stapelPanelLinks.setLayout(stapelPanelLLayout);
+        stapelPanelLinks.add(trekStapel);
         
-        stapelPanel.setBackground(Color.red);
-        stapelPanel.setPreferredSize(stapelPanelDimension);
-        kolomPanel.setBackground(Color.red);
+        stapelPanelRechts = new JPanel();
+        stapelPanelRechts.setLayout(stapelPanelRLayout);
         
         //eindstapels initialiseren
         eindStapels = new EindStapel[Deck.getNKleuren()];
         for(int i = 0; i < Deck.getNKleuren(); i++)
         {
-            eindStapels[i] = new EindStapel(Deck.getKleuren()[i]);
+            eindStapels[i] = new EindStapel();
+            stapelPanelRechts.add(eindStapels[i]); 
+            eindStapels[i].setVisible(true);
+            eindStapels[i].setMinimumSize(Deck.getCardDimension());
         }
+                
+        stapelPanelTotaal = new JPanel();
+        stapelPanelTotaal.setLayout(stapelPanelTLayout);
+        
+        stapelPanelTotaal.add(stapelPanelLinks, BorderLayout.WEST);
+        stapelPanelTotaal.add(stapelPanelRechts, BorderLayout.CENTER);
+        
+        kolomText = new JTextArea();
+        
+        kolomPanel = new JPanel();
+        kolomPanel.add(kolomText);
+        
+        //panels toevoegen
+        holdsAll = new JPanel();
+        holdsAll.setLayout(totalLayout);
+        this.add(holdsAll);
+        
+        holdsAll.add(stapelPanelTotaal, BorderLayout.NORTH);
+        holdsAll.add(kolomPanel, BorderLayout.CENTER);
+        
+        stapelPanelLinks.setBackground(Color.red);
+        stapelPanelLinks.setPreferredSize(stapelPanelDimension);
+        stapelPanelRechts.setBackground(Color.red);
+        kolomPanel.setBackground(Color.red);
         
         //kolommen initialiseren
         vulKolommen();
                 
+        aflegStapel = new AflegStapel();
+        
+        aflegStapel.addMouseListener(this);
+        stapelPanelLinks.add(aflegStapel);
+        aflegStapel.setVisible(true);
+        aflegStapel.setLocation(Deck.getCardWidth() + 200, 50);
+        
         draaiKaart();
     }
     
     //haalt kaart van de trekstapel en legt hem op de aflegstapel
     private void draaiKaart()
     {
-            nGedraaid++;
-
             Kaart getrokken = trekStapel.trekKaart();
 
-            if(aflegStapel == null)
-            {
-                aflegStapel = new AflegStapel(getrokken);
-                aflegStapel.addMouseListener(this);
-                stapelPanel.add(aflegStapel);
-                aflegStapel.setVisible(true);
-                aflegStapel.setLocation(Deck.getCardWidth() + 200, 50);
-            }
-            else
-            {
-                aflegStapel.addKaart(getrokken);
-            }
-            //kolomText.setText("getrokken kaart nr. " + nGedraaid + ": " + getrokken.getKleur() + " " + getrokken.getWaarde() + 
-            //            "\ntrekstapel:" + trekStapel.getBovensteKaart().getKleur() + " " + trekStapel.getBovensteKaart().getWaarde() +
-            //            "\naflegstapel: " + aflegStapel.getBovensteKaart());
+            aflegStapel.addKaart(getrokken);
     }
     
     private static void vulKolommen()
@@ -111,9 +118,15 @@ public class Patience extends JFrame implements MouseListener
         }
     }
         
-    public static void legOpEindStapel(Kaart kaart)
+    public void legOpEindStapel(Kaart kaart, Stapel van, EindStapel naar)
     {
         String kleur = kaart.getKleur();
+        if(naar.getKleur().equals("") && kaart.getWaarde().equals("A"))
+        {
+            //van.trekKaart();
+            naar.setKleur(kaart.getKleur());
+            naar.addKaart(kaart);
+        }
     }
     
     public static void legOpKolom(Kaart[] kaarten, Kolom kolom)
@@ -153,9 +166,16 @@ public class Patience extends JFrame implements MouseListener
         {
             draaiKaart();
         }
-        if(e.getSource() == aflegStapel)
+        else if(e.getSource() == aflegStapel)
         {
-            //kolomText.setText("aflegstapel aangeklikt");
+            if(!aflegStapel.getAangeklikt())
+            {
+                aflegStapel.setAangeklikt(true);
+            }
+            else
+            {
+                aflegStapel.setAangeklikt(false);
+            }
         }
         
     }
