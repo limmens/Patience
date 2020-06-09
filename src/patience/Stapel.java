@@ -17,26 +17,38 @@ import javax.swing.border.*;
  */
 public class Stapel extends JPanel
 {
+    protected Kaart[] kaarten;
     protected int nKaarten;
     protected Kaart bovensteKaart;
+    
     protected boolean aangeklikt;
     
     protected JLabel leegLabel;
-    
-    //soorten kaarten
-    
-    protected Kaart[] kaarten;
+    protected Image leegImage;
+    protected ImageIcon icon;
     
     public Stapel()
     {
         kaarten = new Kaart[Deck.getNKleuren() * Deck.getNWaarden()];
+        
         aangeklikt = false;
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        leegLabel = new JLabel();
         
-        leegLabel.setBackground(Color.BLUE);
-        leegLabel.setMinimumSize(Deck.getCardDimension());
-                
+        try 
+        {
+            ImageIcon ia = new ImageIcon(getClass().getResource("/resources/leegRood.png"));  
+            leegImage = ia.getImage().getScaledInstance(Deck.getCardWidth(),Deck.getCardHeight(), Image.SCALE_SMOOTH);
+            
+        } 
+        catch (Exception ex) 
+        {
+            System.out.println("plaatje niet gevonden");
+        }
+        
+        icon = new ImageIcon(leegImage);
+        
+        leegLabel = new JLabel();
+        leegLabel.setIcon(icon);
         this.add(leegLabel);
     }
     
@@ -75,5 +87,42 @@ public class Stapel extends JPanel
         System.out.println("\n");
     }
 
+    //haalt kaart van de stapel en geeft deze terug met een return
+    public Kaart trekKaart()
+    {
+        Kaart getrokken = bovensteKaart;
+        
+        nKaarten--; 
+        
+        if(nKaarten > 0)
+        {
+            bovensteKaart = kaarten[nKaarten - 1];
+            this.add(bovensteKaart);
+        }
+        else
+        {
+            //this.setVisible(false);
+            this.add(leegLabel);
+        }
+        return getrokken;
+    }
     
+    //voegt kaart toe aan aflegstapel en draait hem open
+    public void addKaart(Kaart k)
+    {
+        k.setVisible(true);
+        if(nKaarten > 0)
+            bovensteKaart.setVisible(false);
+        else
+            this.remove(leegLabel);
+            
+        bovensteKaart = k;
+        kaarten[nKaarten] = k;
+        
+        bovensteKaart.setZichtbaar(true);
+        bovensteKaart.verversKaart();
+        this.add(bovensteKaart);
+        
+        nKaarten++;
+    }
 }
