@@ -19,6 +19,7 @@ public class TrekStapel extends Stapel
 {
     public TrekStapel()
     {
+        this.remove(leegLabel);
         nKaarten = Deck.getNKaarten();
         
         for(int i = 0; i < Deck.getNKleuren(); i++)
@@ -48,22 +49,7 @@ public class TrekStapel extends Stapel
         }
     }
     
-    //haalt kaart van de stapel en geeft deze terug met een return
-    public Kaart trekKaart()
-    {
-        Kaart getrokken = bovensteKaart;
-        
-        nKaarten--; 
-        
-        if(nKaarten > 0)
-        {
-            bovensteKaart = kaarten[nKaarten - 1];
-            this.add(bovensteKaart);
-        }
-        else
-            this.setVisible(false);
-        return getrokken;
-    }
+    
     
     //pakt meerdere kaarten, nog geen effect op GUI
     public Kaart[] pakKaarten (int n)
