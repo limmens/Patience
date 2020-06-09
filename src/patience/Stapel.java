@@ -5,15 +5,12 @@
  */
 package patience;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.event.*;
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
 
 /**
  *
- * @author Gebruiker
+ * @author Loes Immens
  */
 public class Stapel extends JPanel
 {
@@ -75,21 +72,12 @@ public class Stapel extends JPanel
         else
             this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
-    
-    //print stapel zonder GUI
-    public void printStapel()
-    {
-        if(nKaarten == 0)
-            System.out.print("leeg");
-        for(int i = 0; i < nKaarten; i++)
-            System.out.print(kaarten[i] + " ");
-        
-        System.out.println("\n");
-    }
 
     //haalt kaart van de stapel en geeft deze terug met een return
     public Kaart trekKaart()
     {
+        this.remove(bovensteKaart);
+        
         Kaart getrokken = bovensteKaart;
         
         nKaarten--; 
@@ -98,31 +86,76 @@ public class Stapel extends JPanel
         {
             bovensteKaart = kaarten[nKaarten - 1];
             this.add(bovensteKaart);
+            bovensteKaart.setVisible(true);
         }
         else
         {
-            //this.setVisible(false);
+            leegLabel.setVisible(true);
             this.add(leegLabel);
         }
+        
         return getrokken;
     }
     
-    //voegt kaart toe aan aflegstapel en draait hem open
+    //voegt kaart toe aan stapel en draait hem open
     public void addKaart(Kaart k)
     {
-        k.setVisible(true);
         if(nKaarten > 0)
             bovensteKaart.setVisible(false);
-        else
-            this.remove(leegLabel);
-            
+          
         bovensteKaart = k;
-        kaarten[nKaarten] = k;
+        setZichtbareKant(bovensteKaart);
+        bovensteKaart.toonJuisteKant();
         
-        bovensteKaart.setZichtbaar(true);
-        bovensteKaart.verversKaart();
+        kaarten[nKaarten] = bovensteKaart;
+        
         this.add(bovensteKaart);
+        bovensteKaart.setVisible(true);
+        
+        this.remove(leegLabel);
+        leegLabel.setVisible(false);
         
         nKaarten++;
     }
+    
+    //print stapel zonder GUI
+    public void printStapel()
+    {
+        if(nKaarten == 0)
+            System.out.print("leeg");
+        for(int i = 0; i < nKaarten; i++)
+        {
+            System.out.print(kaarten[i]);
+            if(i < nKaarten - 1)
+                System.out.print(", ");
+            else
+                System.out.println(".");
+        }
+    }
+    
+    //pakt meerdere kaarten, nog geen effect op GUI
+    public Kaart[] pakKaarten (int n)
+    {
+        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
+        for(int i = 0; i < n; i++)
+        {
+            gepakt[i] = kaarten[nKaarten - 1];
+            nKaarten --;
+            bovensteKaart = kaarten[nKaarten - 1];
+        }
+        return gepakt;
+    }
+    
+    public void setZichtbareKant(Kaart kaart)
+    {
+        kaart.setZichtbaar(true);
+        System.out.println("Kaart " + kaart + " wordt " + kaart.getZichtbaarString() + " neergelegd.");
+    }
+    
+    public String toString()
+    {
+        return "Stapel";
+    }
+
+    
 }
