@@ -16,9 +16,8 @@ public class EindStapel extends Stapel
     private String kleur;
     private Kaart bovensteKaart;
     
-    public EindStapel()//String kleur)
+    public EindStapel()
     {
-        //this.kleur = kleur;
         nKaarten = 0;
         kleur = "";
     }
@@ -34,19 +33,4 @@ public class EindStapel extends Stapel
         this.kleur = kleur;
     }
     
-    public void addKaart(Kaart k)
-    {
-        k.setVisible(true);
-        if(nKaarten > 0)
-            bovensteKaart.setVisible(false);
-            
-        bovensteKaart = k;
-        kaarten[nKaarten] = k;
-        
-        bovensteKaart.setZichtbaar(true);
-        bovensteKaart.verversKaart();
-        this.add(bovensteKaart);
-        
-        nKaarten++;
-    }
 }
