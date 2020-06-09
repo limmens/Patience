@@ -8,17 +8,22 @@ package patience;
 
 /**
  *
- * @author Gebruiker
+ * @author Loes Immens
  */
 public class AflegStapel extends Stapel
 {
     public AflegStapel()
     {
         nKaarten = 0;
+        
     }
     
     
     
+    @Override
+    public String toString()
+    {
+        return "Aflegstapel";
+    }
     
-
 }
