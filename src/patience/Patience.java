@@ -23,13 +23,12 @@ public class Patience extends JFrame implements MouseListener
     private static Kolom[] kolommen = new Kolom[7];
     
     JPanel holdsAll;
+    
     JPanel stapelPanelTotaal;
     JPanel stapelPanelLinks;
     JPanel stapelPanelRechts;
+    
     JPanel kolomPanel;
-    
-    Dimension stapelPanelDimension = new Dimension (Deck.getCardWidth() * 2 + 50, Deck.getCardHeight() + 50);
-    
     JTextArea kolomText;
     
     
@@ -37,7 +36,6 @@ public class Patience extends JFrame implements MouseListener
     {
         trekStapel = new TrekStapel();
         trekStapel.addMouseListener(this);
-        trekStapel.setLocation(50, 50);
         trekStapel.setVisible(true);
         
         BorderLayout totalLayout = new BorderLayout();
@@ -85,7 +83,6 @@ public class Patience extends JFrame implements MouseListener
         holdsAll.add(kolomPanel, BorderLayout.CENTER);
         
         stapelPanelLinks.setBackground(Color.red);
-        stapelPanelLinks.setPreferredSize(stapelPanelDimension);
         stapelPanelRechts.setBackground(Color.red);
         kolomPanel.setBackground(Color.red);
         
@@ -97,7 +94,6 @@ public class Patience extends JFrame implements MouseListener
         aflegStapel.addMouseListener(this);
         stapelPanelLinks.add(aflegStapel);
         aflegStapel.setVisible(true);
-        aflegStapel.setLocation(Deck.getCardWidth() + 200, 50);
         
         draaiKaart();
     }
@@ -105,9 +101,7 @@ public class Patience extends JFrame implements MouseListener
     //haalt kaart van de trekstapel en legt hem op de aflegstapel
     private void draaiKaart()
     {
-            Kaart getrokken = trekStapel.trekKaart();
-
-            aflegStapel.addKaart(getrokken);
+        aflegStapel.addKaart(trekStapel.trekKaart());
     }
     
     private static void vulKolommen()
@@ -118,14 +112,15 @@ public class Patience extends JFrame implements MouseListener
         }
     }
         
-    public void legOpEindStapel(Kaart kaart, Stapel van, EindStapel naar)
+    
+    public void legOpEindStapel(Stapel van, EindStapel naar)
     {
-        String kleur = kaart.getKleur();
-        if(naar.getKleur().equals("") && kaart.getWaarde().equals("A"))
+        Kaart getrokken = van.trekKaart();
+        String kleur = getrokken.getKleur();
+        if(naar.getKleur().equals("") && getrokken.getWaarde().equals("A"))
         {
-            //van.trekKaart();
-            naar.setKleur(kaart.getKleur());
-            naar.addKaart(kaart);
+            naar.setKleur(getrokken.getKleur());
+            naar.addKaart(getrokken);
         }
     }
     
@@ -171,10 +166,30 @@ public class Patience extends JFrame implements MouseListener
             if(!aflegStapel.getAangeklikt())
             {
                 aflegStapel.setAangeklikt(true);
+                legOpEindStapel(aflegStapel,eindStapels[0]);
             }
             else
             {
                 aflegStapel.setAangeklikt(false);
+            }
+        }
+        else 
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                if(e.getSource() == eindStapels[i])
+                {
+                    if (!eindStapels[i].getAangeklikt())
+                    {
+                        kolomText.setText("eindstapel " + i + "aangeklikt");
+                        eindStapels[i].setAangeklikt(true);
+                    }
+                    else
+                    {
+                        eindStapels[i].setAangeklikt(false);
+                    }
+
+                }
             }
         }
         
