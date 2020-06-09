@@ -5,10 +5,6 @@
  */
 package patience;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.util.Random;
 
 /**
@@ -30,11 +26,11 @@ public class TrekStapel extends Stapel
         
         bovensteKaart = kaarten[nKaarten-1];
         
-        //this.add(bovensteKaart);
+        this.add(bovensteKaart);
     }
     
     //stapel wordt n keer geschud: dit betekent dat n keer een random kaart van plaats wisselt met een andere random kaart
-    private void schudStapel(int n)
+    public void schudStapel(int n)
     {
         Random random = new Random();
         Kaart reserve;
@@ -47,26 +43,22 @@ public class TrekStapel extends Stapel
             kaarten[r1] = kaarten[r2];
             kaarten[r2] = reserve;
         }
+        
+        System.out.println("Stapel met " + n + " kaarten wordt geschud");
     }
     
-    
-    
-    //pakt meerdere kaarten, nog geen effect op GUI
-    public Kaart[] pakKaarten (int n)
+    @Override
+    public String toString()
     {
-        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
-        for(int i = 0; i < n; i++)
-        {
-            gepakt[i] = kaarten[nKaarten - 1];
-            nKaarten --;
-            bovensteKaart = kaarten[nKaarten - 1];
-        }
-        return gepakt;
+        return "Trekstapel";
     }
-    
-    
 
-    
+    @Override
+    public void setZichtbareKant(Kaart kaart)
+    {
+        kaart.setZichtbaar(false);
+        System.out.println("Kaart " + kaart + " wordt " + kaart.getZichtbaarString() + " neergelegd.");
+    }
     
     
 }
