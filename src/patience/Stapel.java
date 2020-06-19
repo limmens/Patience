@@ -90,8 +90,10 @@ public class Stapel extends JPanel
         }
         else
         {
-            leegLabel.setVisible(true);
-            this.add(leegLabel);
+            
+                bovensteKaart = null;
+                leegLabel.setVisible(true);
+                this.add(leegLabel);
         }
         
         return getrokken;
@@ -116,6 +118,22 @@ public class Stapel extends JPanel
         leegLabel.setVisible(false);
         
         nKaarten++;
+    }
+    
+    public boolean bevatDubbeleKaarten()
+    {
+        for(int i = 0; i < nKaarten; i++)
+        {
+            for(int j = i + 1; j < nKaarten; j++)
+            {
+                if((kaarten[i] == kaarten[j]) && (kaarten[i] != null))
+                {
+                    System.out.println("\nDUBBEL in " + this + ": " + kaarten[i] + " op plek " + i + " en " + kaarten[j] + " op plek " + j + "!");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     //print stapel zonder GUI
