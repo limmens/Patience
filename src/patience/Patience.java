@@ -11,6 +11,7 @@ import javax.swing.*;
 
 /**
  *to do:
+ * draaikaart uit constructor patience halen
  * log in txt-bestand schrijven?
  * verdwenen eindstapel fixen: komt dit nog voor?
  * kaartenrij vervangen door pointer?
@@ -67,6 +68,8 @@ public class Patience extends JFrame implements MouseListener
             eindStapels[i].setMinimumSize(Deck.getCardDimension());
             eindStapels[i].addMouseListener(this);
         }
+        
+        
                 
         stapelPanelTotaal = new JPanel();
         stapelPanelTotaal.setLayout(stapelPanelTLayout);
@@ -77,7 +80,17 @@ public class Patience extends JFrame implements MouseListener
         kolomText = new JTextArea();
         
         kolomPanel = new JPanel();
-        kolomPanel.add(kolomText);
+        //kolomPanel.add(kolomText);
+        
+        //kolommen initialiseren
+        //vulKolommen();
+        for(int i = 0; i < nKolommen; i++)
+        {
+            kolommen[i] = new Kolom(i+1,trekStapel.pakKaarten(i+1));
+            kolomPanel.add(kolommen[i]);
+            kolommen[i].setVisible(true);
+            kolommen[i].addMouseListener(this);
+        }
         
         //panels toevoegen
         holdsAll = new JPanel();
@@ -90,9 +103,6 @@ public class Patience extends JFrame implements MouseListener
         stapelPanelLinks.setBackground(Color.red);
         stapelPanelRechts.setBackground(Color.red);
         kolomPanel.setBackground(Color.red);
-        
-        //kolommen initialiseren
-        //vulKolommen();
                 
         aflegStapel = new AflegStapel();
         
@@ -101,7 +111,7 @@ public class Patience extends JFrame implements MouseListener
         aflegStapel.setVisible(true);
         
         nGedraaid = 0;
-        draaiKaart();
+        //draaiKaart();
     }
     
     //haalt kaart van de trekstapel en legt hem op de aflegstapel
@@ -178,10 +188,12 @@ public class Patience extends JFrame implements MouseListener
        
     private static void vulKolommen()
     {
+        
         for(int i = 0; i < nKolommen; i++)
         {
-            kolommen[i] = new Kolom(i+1,trekStapel.pakKaarten(i+1));
+            //kolommen[i] = new Kolom(i+1,trekStapel.pakKaarten(i+1));
         }
+        
     }
     
     public static void legOpKolom(Kaart[] kaarten, Kolom kolom)
