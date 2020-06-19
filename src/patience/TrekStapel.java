@@ -37,8 +37,8 @@ public class TrekStapel extends Stapel
         
         for(int i = 0; i < n; i++)
         {
-            int r1 = random.nextInt(52);
-            int r2 = random.nextInt(52);
+            int r1 = random.nextInt(n - 1);
+            int r2 = random.nextInt(n - 1);
             reserve = kaarten[r1];
             kaarten[r1] = kaarten[r2];
             kaarten[r2] = reserve;
