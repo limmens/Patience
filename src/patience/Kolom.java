@@ -5,41 +5,50 @@
  */
 package patience;
 
+import java.awt.Color;
+import java.awt.Image;
+import javax.swing.*;
+
 /**
  *
  * @author Loes Immens
  */
-public class Kolom
+public class Kolom extends Stapel
 {
-    private int nKaarten;
+    
     private Kaart[] kolom = new Kaart[52];
-    private Kaart bovensteKaart;
     
     public Kolom(int n, Kaart[] kaarten)
     {
+        this.remove(leegLabel);
         nKaarten = n;
         
-        for(int i = 0; i < (n-1); i++)
+        for(int i = 0; i < n; i++)
         {
-            kolom[i] = kaarten[i];
-            kolom[i].setZichtbaar(false);
+            this.kaarten[i] = kaarten[i];
+            
+            if(i == (n - 1))
+            {
+                bovensteKaart = this.kaarten[i];
+                bovensteKaart.setZichtbaar(true);
+                
+            }
         }
-        kolom[n-1] = kaarten[n-1];
-        kolom[n-1].setZichtbaar(true);
-        bovensteKaart = kolom[n-1];
+        
+        bovensteKaart.toonJuisteKant();
+        bovensteKaart.setVisible(true);
+        this.add(bovensteKaart);
+        
     }
     
-    public Kaart getBovensteKaart()
-    {
-        return bovensteKaart;
-    }
-    
+    /*
     public void printKolom()
     {
         System.out.print("Kolom " + nKaarten + ": ");
         for(int i = 0; i < nKaarten; i++)
-            System.out.print(kolom[i] + " ");
+            System.out.print(kaarten[i] + " ");
         System.out.println("\n");
     }
+*/
     
 }
