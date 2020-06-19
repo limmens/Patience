@@ -151,19 +151,6 @@ public class Stapel extends JPanel
         }
     }
     
-    //pakt meerdere kaarten, nog geen effect op GUI
-    public Kaart[] pakKaarten (int n)
-    {
-        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
-        for(int i = 0; i < n; i++)
-        {
-            gepakt[i] = kaarten[nKaarten - 1];
-            nKaarten --;
-            bovensteKaart = kaarten[nKaarten - 1];
-        }
-        return gepakt;
-    }
-    
     public void setZichtbareKant(Kaart kaart)
     {
         kaart.setZichtbaar(true);
@@ -175,5 +162,16 @@ public class Stapel extends JPanel
         return "Stapel";
     }
 
-    
+    //pakt meerdere kaarten, nog geen effect op GUI
+    public Kaart[] pakKaarten (int n)
+    {
+        
+        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
+        for(int i = 0; i < n; i++)
+        {
+            gepakt[i] = trekKaart();
+        }
+        return gepakt;
+
+    }
 }
