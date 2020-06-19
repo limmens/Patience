@@ -20,10 +20,9 @@ public class Main
     {
         Patience p = new Patience();
         p.setTitle("Patience door Loes Immens");
-        p.setSize(1800,1000);
+        p.setSize(Deck.getCardWidth() * 8,Deck.getCardHeight() * 3 + 150);
         p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         p.setVisible(true);
-        
     }
     
 }

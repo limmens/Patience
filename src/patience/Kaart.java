@@ -28,7 +28,9 @@ public class Kaart extends JLabel
     private String waarde;
     private String kleur;
     private String kleurRZ;
+    
     private boolean zichtbaar;
+    
     private Kaart vorige;
     private Kaart volgende;
     
@@ -80,7 +82,7 @@ public class Kaart extends JLabel
         
     }
     
-    public void verversKaart()
+    public void toonJuisteKant()
     {
         if(!zichtbaar)
         {
@@ -94,9 +96,22 @@ public class Kaart extends JLabel
         }
     }
     
+    public boolean getZichtbaar()
+    {
+        return zichtbaar;
+    }
+    
     public void setZichtbaar(boolean z)
     {
         zichtbaar = z;
+    }
+    
+    public String getZichtbaarString()
+    {
+        if(zichtbaar)
+            return "zichtbaar";
+        else
+            return "niet zichtbaar";
     }
     
     public String getKleur()
@@ -114,14 +129,9 @@ public class Kaart extends JLabel
         return waarde;
     }
     
+    @Override
     public String toString()
     {
-        if(zichtbaar)
-            return kleur + " " + waarde;
-        else
-            return "#";
+        return kleur + waarde;
     }
-    
-    
-   
 }

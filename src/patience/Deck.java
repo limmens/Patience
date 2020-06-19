@@ -9,7 +9,7 @@ import java.awt.Dimension;
 
 /**
  *
- * @author Gebruiker
+ * @author Loes Immens
  */
 public final class Deck
 {
