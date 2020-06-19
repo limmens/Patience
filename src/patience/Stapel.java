@@ -76,6 +76,7 @@ public class Stapel extends JPanel
     //haalt kaart van de stapel en geeft deze terug met een return
     public Kaart trekKaart()
     {
+        bovensteKaart.setVisible(false);
         this.remove(bovensteKaart);
         
         Kaart getrokken = bovensteKaart;
@@ -90,10 +91,9 @@ public class Stapel extends JPanel
         }
         else
         {
-            
-                bovensteKaart = null;
-                leegLabel.setVisible(true);
-                this.add(leegLabel);
+            bovensteKaart = null;
+            leegLabel.setVisible(true);
+            this.add(leegLabel);
         }
         
         return getrokken;
