@@ -11,7 +11,6 @@ import javax.swing.*;
 
 /**
  *to do:
- * na schudden en daarna weer laatste kaart van trekstapel draaien, wordt trekstapel niet zichtbaar leeg, ook niet als alle kaarten op eindstapels liggen
  * log in txt-bestand schrijven?
  * verdwenen eindstapel fixen: komt dit nog voor?
  * kaartenrij vervangen door pointer?
