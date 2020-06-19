@@ -11,13 +11,10 @@ import javax.swing.*;
 
 /**
  *to do:
- * zichtbare kaart op trekstapel fixen
- * kaarten die op eindstapel liggen verschijnen ineens weer op trekstapel
- * verdwenen eindstapel fixen: gebeurt als bovenste kaart eindstapel ineens weer op trekstapel verschijnt
- * kaartenrij vervangen door pointer?
+ * na schudden en daarna weer laatste kaart van trekstapel draaien, wordt trekstapel niet zichtbaar leeg, ook niet als alle kaarten op eindstapels liggen
  * log in txt-bestand schrijven?
- * na schudden en daarna weer laatste kaart van trekstapel draaien, wordt trekstapel niet zichtbaar leeg
- * 
+ * verdwenen eindstapel fixen: komt dit nog voor?
+ * kaartenrij vervangen door pointer?
  * @author Loes Immens
  */
 public class Patience extends JFrame implements MouseListener
@@ -119,9 +116,14 @@ public class Patience extends JFrame implements MouseListener
             {
                 Kaart terug = aflegStapel.trekKaart();
                 trekStapel.addKaart(terug);
-                System.out.println(terug + " wordt teruggelegd. Zichtbaar? " + terug.getZichtbaar());
+                System.out.println(terug + " wordt teruggelegd. Zichtbaar? " + terug.getZichtbaar() + "\n");
             }
+            
+            System.out.print("\nTrekstapel bevat de volgende kaarten: ");
+            trekStapel.printStapel();
+            
             trekStapel.schudStapel(trekStapel.getNKaarten());
+            
             kolomText.setText(trekStapel.getNKaarten() + " kaarten op de trekstapel");
         }
         else
@@ -129,11 +131,15 @@ public class Patience extends JFrame implements MouseListener
             nGedraaid++;
 
             Kaart getrokken = trekStapel.trekKaart();
-            aflegStapel.addKaart(getrokken);
             kolomText.setText("kaart " + nGedraaid + " gedraaid: " + getrokken);
-            System.out.println("kaart " + nGedraaid + " gedraaid: " + getrokken);
+            System.out.println("\nKaart " + nGedraaid + " gedraaid: " + getrokken);
+            aflegStapel.addKaart(getrokken);
+            
         }
-        
+        System.out.print("\nTrekstapel bevat de volgende kaarten: ");
+        trekStapel.printStapel();
+        System.out.print("\nAflegstapel bevat de volgende kaarten: ");
+        aflegStapel.printStapel();
     }
     
     //legt bovenste kaart van stapel 'van' op eindstapel 'naar' als deze kaart op deze eindstapel past;
@@ -200,6 +206,11 @@ public class Patience extends JFrame implements MouseListener
     @Override
     public void mousePressed(MouseEvent e)
     {
+        if(trekStapel.bevatDubbeleKaarten() || aflegStapel.bevatDubbeleKaarten())
+        {
+            kolomText.setText("dubbele kaarten!");
+        }
+        
         Object o = e.getSource();
 
         if(o == trekStapel)
