@@ -206,11 +206,6 @@ public class Patience extends JFrame implements MouseListener
     @Override
     public void mousePressed(MouseEvent e)
     {
-        if(trekStapel.bevatDubbeleKaarten() || aflegStapel.bevatDubbeleKaarten())
-        {
-            kolomText.setText("dubbele kaarten!");
-        }
-        
         Object o = e.getSource();
 
         if(o == trekStapel)
@@ -221,14 +216,9 @@ public class Patience extends JFrame implements MouseListener
         else if(o == aflegStapel)
         {
             if(!aflegStapel.getAangeklikt())
-            {
                 aflegStapel.setAangeklikt(true);
-                //legOpEindStapel(aflegStapel,eindStapels[0]);
-            }
             else
-            {
                 aflegStapel.setAangeklikt(false);
-            }
         }
         for(int i = 0; i < 4; i++)
         {
