@@ -5,6 +5,7 @@
  */
 package patience;
 
+import java.awt.event.MouseListener;
 import java.util.Random;
 
 /**
@@ -15,16 +16,18 @@ public class TrekStapel extends Stapel
 {
     public TrekStapel()
     {
-        this.remove(leegLabel);
+        //this.remove(leegLabel);
         nKaarten = Deck.getNKaarten();
         
         for(int i = 0; i < Deck.getNKleuren(); i++)
             for(int j = 0; j < Deck.getNWaarden(); j++)
+            {
                 kaarten[i * 13 + j] = new Kaart(Deck.getKleuren()[i], Deck.getWaarden()[j], false);
-        
-        schudStapel(52);
+            }
         
         bovensteKaart = kaarten[nKaarten-1];
+        
+        schudStapel(52);
         
         this.add(bovensteKaart);
     }
@@ -32,6 +35,7 @@ public class TrekStapel extends Stapel
     //stapel wordt n keer geschud: dit betekent dat n keer een random kaart van plaats wisselt met een andere random kaart
     public void schudStapel(int n)
     {
+        this.remove(bovensteKaart);
         Random random = new Random();
         Kaart reserve;
         
@@ -43,6 +47,9 @@ public class TrekStapel extends Stapel
             kaarten[r1] = kaarten[r2];
             kaarten[r2] = reserve;
         }
+        
+        bovensteKaart = kaarten[nKaarten - 1];
+        this.add(bovensteKaart);
         
         System.out.println("Stapel met " + n + " kaarten wordt geschud");
     }

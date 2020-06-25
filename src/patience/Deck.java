@@ -21,7 +21,7 @@ public final class Deck
     private static final int nKaarten = nKleuren * nWaarden;
     
     private static int cardWidth = 150;
-    private static int cardHeight = 250;
+    private static int cardHeight = 230;
     private static Dimension cardDimension = new Dimension(cardWidth,cardHeight);
     
     public Deck()
@@ -67,6 +67,11 @@ public final class Deck
     static public int getNKaarten()
     {
         return nKaarten;
+    }
+    
+    static public int getHeightUnderlying()
+    {
+        return cardHeight / 5;
     }
     
     public static boolean preciesEenWaardeHoger(Kaart k1, Kaart k2)

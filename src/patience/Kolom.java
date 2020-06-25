@@ -5,41 +5,72 @@
  */
 package patience;
 
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.GroupLayout.*;
+
+
+
 /**
  *
  * @author Loes Immens
  */
-public class Kolom
+public class Kolom extends Stapel
 {
-    private int nKaarten;
-    private Kaart[] kolom = new Kaart[52];
-    private Kaart bovensteKaart;
     
     public Kolom(int n, Kaart[] kaarten)
     {
+        super();
+        
         nKaarten = n;
         
-        for(int i = 0; i < (n-1); i++)
+        
+        GroupLayout gl = new GroupLayout(this);
+        this.setLayout(gl);
+        ParallelGroup pg = gl.createParallelGroup(GroupLayout.Alignment.LEADING);
+        gl.setHorizontalGroup(gl.createSequentialGroup().addGroup(pg));
+        SequentialGroup sg = gl.createSequentialGroup();
+        gl.setVerticalGroup(sg);
+
+        for(int i = n - 1; i >= 0; i--)
         {
-            kolom[i] = kaarten[i];
-            kolom[i].setZichtbaar(false);
+            this.kaarten[i] = kaarten[i];
+            this.kaarten[i].setVisible(true);
+            
+            this.kaarten[i].setY(i * Deck.getHeightUnderlying());
+            
+            if(i == n - 1)
+            {
+                bovensteKaart = this.kaarten[i];
+                bovensteKaart.setZichtbaar(true);
+            }
+            else
+                this.kaarten[i].setZichtbaar(false);
+            
+            this.kaarten[i].toonJuisteKant();
+            
+            pg.addGroup(gl.createSequentialGroup().
+            addComponent(kaarten[i]));
+            sg.addGroup(gl.createParallelGroup().
+            addComponent(kaarten[i]));
+            kaarten[i].repaint();
         }
-        kolom[n-1] = kaarten[n-1];
-        kolom[n-1].setZichtbaar(true);
-        bovensteKaart = kolom[n-1];
     }
     
-    public Kaart getBovensteKaart()
+    public Kaart[] getKaarten()
     {
-        return bovensteKaart;
+        return kaarten;
     }
     
-    public void printKolom()
+    @Override
+    public Component.BaselineResizeBehavior getBaselineResizeBehavior()
     {
-        System.out.print("Kolom " + nKaarten + ": ");
-        for(int i = 0; i < nKaarten; i++)
-            System.out.print(kolom[i] + " ");
-        System.out.println("\n");
+        return Component.BaselineResizeBehavior.CONSTANT_ASCENT;
     }
-    
+
+    @Override
+    public int getBaseline(int width, int height)
+    {
+        return 0;
+    }
 }

@@ -5,25 +5,17 @@
  */
 package patience;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
  * @author Loes Immens
  */
-public class Kaart extends JLabel
+public class Kaart extends JLabel 
 {
     private String waarde;
     private String kleur;
@@ -41,6 +33,9 @@ public class Kaart extends JLabel
     ImageIcon icon;
     private Graphics g;
     
+    int x;
+    int y;
+    
     public Kaart(String kleur, String waarde, boolean zichtbaar)
     {
         this.kleur = kleur;
@@ -54,6 +49,8 @@ public class Kaart extends JLabel
         else
             kleurRZ = "";
         
+        x = 0;
+        y = 0;
         
         try 
         {
@@ -79,7 +76,6 @@ public class Kaart extends JLabel
             
         }
         this.setIcon(icon);
-        
     }
     
     public void toonJuisteKant()
@@ -94,6 +90,28 @@ public class Kaart extends JLabel
             icon.setImage(voorkant);
             this.setIcon(icon);
         }
+    }
+    
+    @Override
+    public int getX()
+    {
+        return x;
+    }
+    
+    @Override
+    public int getY()
+    {
+        return y;
+    }
+    
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+    
+    public void setY(int y)
+    {
+        this.y = y;
     }
     
     public boolean getZichtbaar()
@@ -134,4 +152,5 @@ public class Kaart extends JLabel
     {
         return kleur + waarde;
     }
+    
 }

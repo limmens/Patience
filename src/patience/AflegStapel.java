@@ -15,7 +15,7 @@ public class AflegStapel extends Stapel
     public AflegStapel()
     {
         nKaarten = 0;
-        
+        this.add(leegLabel);
     }
     
     
