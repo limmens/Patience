@@ -26,27 +26,28 @@ public class Stapel extends JPanel
     
     public Stapel()
     {
+        //stapel kaarten krijgt maximale lengte, namelijk het aantal kaarten in een deck
         kaarten = new Kaart[Deck.getNKleuren() * Deck.getNWaarden()];
         
-        aangeklikt = false;
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        aangeklikt = false; //stapel is bij aanmaken niet aangeklikt
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //standaard kleur rand, verandert bij aangeklikt zijn in andere kleur
+        this.setBackground(Color.red);
         
+        //plaatje van een lege stapel
         try 
         {
             ImageIcon ia = new ImageIcon(getClass().getResource("/resources/leegRood.png"));  
             leegImage = ia.getImage().getScaledInstance(Deck.getCardWidth(),Deck.getCardHeight(), Image.SCALE_SMOOTH);
-            
         } 
         catch (Exception ex) 
         {
             System.out.println("plaatje niet gevonden");
-        }
-        
+        }        
         icon = new ImageIcon(leegImage);
-        
         leegLabel = new JLabel();
         leegLabel.setIcon(icon);
-        this.add(leegLabel);
+        //this.add(leegLabel);
+        //leegLabel.setBounds(0,0,Deck.getCardWidth(),Deck.getCardHeight());
     }
     
     public int getNKaarten()
@@ -165,13 +166,11 @@ public class Stapel extends JPanel
     //pakt meerdere kaarten, nog geen effect op GUI
     public Kaart[] pakKaarten (int n)
     {
-        
         Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
         for(int i = 0; i < n; i++)
         {
             gepakt[i] = trekKaart();
         }
         return gepakt;
-
     }
 }
