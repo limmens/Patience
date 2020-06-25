@@ -5,9 +5,11 @@
  */
 package patience;
 
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.*;
 import javax.swing.*;
+import javax.swing.GroupLayout.*;
+
+
 
 /**
  *
@@ -16,39 +18,59 @@ import javax.swing.*;
 public class Kolom extends Stapel
 {
     
-    private Kaart[] kolom = new Kaart[52];
-    
     public Kolom(int n, Kaart[] kaarten)
     {
-        this.remove(leegLabel);
+        super();
+        
         nKaarten = n;
         
-        for(int i = 0; i < n; i++)
+        
+        GroupLayout gl = new GroupLayout(this);
+        this.setLayout(gl);
+        ParallelGroup pg = gl.createParallelGroup(GroupLayout.Alignment.LEADING);
+        gl.setHorizontalGroup(gl.createSequentialGroup().addGroup(pg));
+        SequentialGroup sg = gl.createSequentialGroup();
+        gl.setVerticalGroup(sg);
+
+        for(int i = n - 1; i >= 0; i--)
         {
             this.kaarten[i] = kaarten[i];
+            this.kaarten[i].setVisible(true);
             
-            if(i == (n - 1))
+            this.kaarten[i].setY(i * Deck.getHeightUnderlying());
+            
+            if(i == n - 1)
             {
                 bovensteKaart = this.kaarten[i];
                 bovensteKaart.setZichtbaar(true);
-                
             }
+            else
+                this.kaarten[i].setZichtbaar(false);
+            
+            this.kaarten[i].toonJuisteKant();
+            
+            pg.addGroup(gl.createSequentialGroup().
+            addComponent(kaarten[i]));
+            sg.addGroup(gl.createParallelGroup().
+            addComponent(kaarten[i]));
+            kaarten[i].repaint();
         }
-        
-        bovensteKaart.toonJuisteKant();
-        bovensteKaart.setVisible(true);
-        this.add(bovensteKaart);
-        
     }
     
-    /*
-    public void printKolom()
+    public Kaart[] getKaarten()
     {
-        System.out.print("Kolom " + nKaarten + ": ");
-        for(int i = 0; i < nKaarten; i++)
-            System.out.print(kaarten[i] + " ");
-        System.out.println("\n");
+        return kaarten;
     }
-*/
     
+    @Override
+    public Component.BaselineResizeBehavior getBaselineResizeBehavior()
+    {
+        return Component.BaselineResizeBehavior.CONSTANT_ASCENT;
+    }
+
+    @Override
+    public int getBaseline(int width, int height)
+    {
+        return 0;
+    }
 }
