@@ -22,6 +22,7 @@ public class EindStapel extends Stapel
     {
         nKaarten = 0;
         kleur = "";
+        this.add(leegLabel);
     }
 
     public String getKleur()
