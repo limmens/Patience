@@ -5,6 +5,7 @@
  */
 package patience;
 
+import java.awt.event.MouseListener;
 import java.util.Random;
 
 /**
@@ -15,18 +16,18 @@ public class TrekStapel extends Stapel
 {
     public TrekStapel()
     {
-        this.remove(leegLabel);
+        //this.remove(leegLabel);
         nKaarten = Deck.getNKaarten();
         
         for(int i = 0; i < Deck.getNKleuren(); i++)
             for(int j = 0; j < Deck.getNWaarden(); j++)
+            {
                 kaarten[i * 13 + j] = new Kaart(Deck.getKleuren()[i], Deck.getWaarden()[j], false);
+            }
         
         bovensteKaart = kaarten[nKaarten-1];
         
         schudStapel(52);
-        
-        
         
         this.add(bovensteKaart);
     }
