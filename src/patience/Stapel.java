@@ -30,7 +30,7 @@ public class Stapel extends JPanel
         kaarten = new Kaart[Deck.getNKleuren() * Deck.getNWaarden()];
         
         aangeklikt = false; //stapel is bij aanmaken niet aangeklikt
-        this.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //standaard kleur rand, verandert bij aangeklikt zijn in andere kleur
+        //this.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //standaard kleur rand, verandert bij aangeklikt zijn in andere kleur
         this.setBackground(Color.red);
         
         //plaatje van een lege stapel
@@ -60,6 +60,7 @@ public class Stapel extends JPanel
         return bovensteKaart;
     }
     
+    
     public boolean getAangeklikt()
     {
         return aangeklikt;
@@ -68,10 +69,11 @@ public class Stapel extends JPanel
     public void setAangeklikt(boolean a)
     {
         aangeklikt = a;
-        if(aangeklikt)
-            this.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-        else
-            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        if(!aangeklikt)
+        {
+            for(int i = 0; i < nKaarten; i++)
+                kaarten[i].setAangeklikt(false);
+        }
     }
 
     //haalt kaart van de stapel en geeft deze terug met een return
@@ -81,6 +83,7 @@ public class Stapel extends JPanel
         this.remove(bovensteKaart);
         
         Kaart getrokken = bovensteKaart;
+        getrokken.setY(0);
         
         nKaarten--; 
         
@@ -89,6 +92,11 @@ public class Stapel extends JPanel
             bovensteKaart = kaarten[nKaarten - 1];
             this.add(bovensteKaart);
             bovensteKaart.setVisible(true);
+            if(Kolom.class.isAssignableFrom(this.getClass()))
+            {
+                bovensteKaart.setZichtbaar(true);
+                bovensteKaart.toonJuisteKant();
+            }
         }
         else
         {
@@ -100,12 +108,23 @@ public class Stapel extends JPanel
         return getrokken;
     }
     
+    //pakt meerdere kaarten, maakt gebruik van de methode trekKaart, die één kaart trekt
+    public Kaart[] pakKaarten (int n)
+    {
+        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
+        for(int i = n - 1; i >= 0; i--)
+        {
+            gepakt[i] = trekKaart();
+        }
+        return gepakt;
+    }
+    
     //voegt kaart toe aan stapel en draait hem open
     public void addKaart(Kaart k)
     {
-        if(nKaarten > 0)
+        if(nKaarten > 0 && !Kolom.class.isAssignableFrom(this.getClass()))
             bovensteKaart.setVisible(false);
-          
+        
         bovensteKaart = k;
         setZichtbareKant(bovensteKaart);
         bovensteKaart.toonJuisteKant();
@@ -119,6 +138,15 @@ public class Stapel extends JPanel
         leegLabel.setVisible(false);
         
         nKaarten++;
+        
+        System.out.println("\n" + toString() + " na toevoegen kaart " + k + ": "); 
+        printStapel();
+    }
+    
+    public void voegKaartenToe(Kaart[] ks)
+    {
+        for (Kaart k : ks)
+            addKaart(k);
     }
     
     public boolean bevatDubbeleKaarten()
@@ -162,15 +190,5 @@ public class Stapel extends JPanel
     {
         return "Stapel";
     }
-
-    //pakt meerdere kaarten, nog geen effect op GUI
-    public Kaart[] pakKaarten (int n)
-    {
-        Kaart[] gepakt = new Kaart[n];//n laatste kaarten van rij kaarten
-        for(int i = 0; i < n; i++)
-        {
-            gepakt[i] = trekKaart();
-        }
-        return gepakt;
-    }
+    
 }
