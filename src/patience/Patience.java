@@ -11,9 +11,7 @@ import javax.swing.*;
 
 /**
  *to do:
- * kolomhoogte gelijk maken aan zichtbare kaarten en niet aantal zichtbare kaarten maal kaarthoogte
- * kolommen functionerend maken
- * loze lege ruimtes schrappen
+ * kolommen juiste kaart boven
  * waardes en kleuren als enum?
  * log in txt-bestand schrijven?
  * kaartenrij vervangen door list/pointer?
@@ -41,6 +39,11 @@ public class Patience extends JFrame implements MouseListener
     JTextArea kolomText;
     
     private int nGedraaid;
+    
+    private Kaart[] geselecteerdeKaarten;
+    private int nKaartenGeselecteerd;
+    private Stapel vanStapel;
+    private Stapel naarStapel;
     
     public Patience()
     {
@@ -92,6 +95,8 @@ public class Patience extends JFrame implements MouseListener
             kolomPanel.add(kolommen[i]);
             kolommen[i].setVisible(true);
             kolommen[i].addMouseListener(this);
+            System.out.println("\n" + kolommen[i].toString());
+            kolommen[i].printStapel();
         }
         
         //panels toevoegen
@@ -112,6 +117,9 @@ public class Patience extends JFrame implements MouseListener
         aflegStapel.setVisible(true);
         
         nGedraaid = 0;
+        
+        geselecteerdeKaarten = new Kaart[Deck.getNWaarden()];
+        nKaartenGeselecteerd = 0;
     }
     
     //haalt kaart van de trekstapel en legt hem op de aflegstapel
@@ -150,18 +158,15 @@ public class Patience extends JFrame implements MouseListener
     
     //legt bovenste kaart van stapel 'van' op eindstapel 'naar' als deze kaart op deze eindstapel past;
     //geeft anders een melding
-    public void legOpEindStapel(Stapel van, EindStapel naar)
+    public void legOpEindStapel(Stapel van, EindStapel naar, Kaart getrokken)
     {
-        Kaart getrokken = van.getBovensteKaart();
         if(magOpEindStapel(getrokken,naar))
         {
             naar.addKaart(van.trekKaart());
-            kolomText.setText(getrokken + " van " + van + " naar " + naar);
             System.out.println(getrokken + " van " + van + " naar " + naar);
         }
         else
         {
-            kolomText.setText("deze kaart mag niet op deze eindstapel");
             van.setAangeklikt(false);
         }
         System.out.print("Eindstapel " + naar.getKleur() + " bevat de volgende kaarten: ");
@@ -182,32 +187,48 @@ public class Patience extends JFrame implements MouseListener
             return true;
         return false;
     }
-       
-    private static void vulKolommen()
+    
+    public static void legOpKolom(Stapel van, Kolom naarKolom, Kaart[] getrokken, int nK)
     {
-        
-        for(int i = 0; i < nKolommen; i++)
+        if(magOpKolom(getrokken[0], naarKolom))
         {
-            //kolommen[i] = new Kolom(i+1,trekStapel.pakKaarten(i+1));
+            System.out.println("\n" + getrokken[0] + " mag op " + naarKolom);
+            naarKolom.voegKaartenToe(van.pakKaarten(nK));
         }
-        
+        else
+        {
+            System.out.println("\n" + getrokken[0] + " mag niet op " + naarKolom);
+            van.setAangeklikt(false);
+        }
     }
     
-    public static void legOpKolom(Kaart[] kaarten, Kolom kolom)
+    private static boolean magOpKolom(Kaart getrokken, Kolom naarKolom)
     {
-        
-    }
-    
-    private static boolean magOpKolom(Kaart kaart, Kolom kol)
-    {
-        if(kaart.getKleurRZ().equals(kol.getBovensteKaart().getKleurRZ()))
+        if(naarKolom.getNKaarten() == 0)
         {
-           return false; 
+            if(getrokken.getWaarde().equals("K"))
+            {
+                System.out.println("\n Een koning mag op een lege stapel");
+                return true;
+            }
+            else
+            {
+                System.out.println("\n Een " + getrokken + " mag niet op een lege stapel");
+                return false;
+            }
         }
-        if(Deck.preciesEenWaardeHoger(kol.getBovensteKaart(), kaart))
+        if(getrokken.getKleurRZ().equals(naarKolom.getBovensteKaart().getKleurRZ()))
         {
+            System.out.println("\n" + getrokken + " heeft kleur " + getrokken.getKleurRZ() + " en dat matcht niet");
+            return false; 
+        }
+        if(Deck.preciesEenWaardeHoger(naarKolom.getBovensteKaart(), getrokken))
+        {
+            System.out.println("\n De waarde van " + getrokken + " is precies één waarde lager dan de naarKolom en de kleur is anders en dat matcht dus goed");
             return true;
         }
+        
+        System.out.println("\n" + getrokken + " heeft wel de juiste kleur, maar waarde is niet precies één lager en matcht dus niet");
         return false;
     }
 
@@ -216,67 +237,142 @@ public class Patience extends JFrame implements MouseListener
     {
         Object o = e.getSource();
         
-        if(o == trekStapel)
+        if(Stapel.class.isAssignableFrom(o.getClass())) //als een stapel is aangeklikt
         {
-            draaiKaart();
-            aflegStapel.setAangeklikt(false);
-        }
-        
-        else if(o == aflegStapel)
-        {
-            if(!aflegStapel.getAangeklikt())
-                aflegStapel.setAangeklikt(true);
-            else
+            Stapel s = (Stapel)o; //de aangeklikte stapel
+            System.out.println("\n" + s + " aangeklikt");
+            
+            if(o == trekStapel) //als de trekstapel is aangeklikt
+            {
+                draaiKaart();
                 aflegStapel.setAangeklikt(false);
-        }
-        
-        for(int i = 0; i < Deck.getNKleuren(); i++)
-        {
-            if(o == eindStapels[i])
-            {
-                kolomText.setText("eindstapel " + i + "aangeklikt");
-                eindStapels[i].setAangeklikt(true);
+                for(int i = 0; i < Deck.getNKleuren(); i++)
+                    eindStapels[i].setAangeklikt(false);
+                for(int i = 0; i < nKolommen; i++)
+                    kolommen[i].setAangeklikt(false);
+                nKaartenGeselecteerd = 0;
+                vanStapel = null;
+                naarStapel = null;
             }
-        }
-        
-        for(int i = 0; i < nKolommen; i++)
-        {
-            if(o == kolommen[i])
+            
+            else //als een andere stapel dan de trekstapel is aangeklikt
             {
-                if(kolommen[i].getAangeklikt())
+                if(s.getAangeklikt()) //als de aangeklikte stapel al aangeklikt was
                 {
-                    
+                    s.setAangeklikt(false);
+                    if(s.equals(vanStapel))
+                        if(naarStapel == null)
+                            vanStapel = null;
+                    if(s.equals(naarStapel))
+                        naarStapel = null;
                 }
-                else
+
+                else //als de aangeklikte stapel nog niet aangeklikt was
                 {
-                    System.out.println("kolom " + i + " aangeklikt");
-                    for(int j = 0; j < kolommen[i].getNKaarten(); j++)
+                    if(vanStapel == null) //als er nog geen andere stapel aangeklikt was
                     {
-                        if((e.getY() > kolommen[i].getKaarten()[j].getY()) && (e.getY() < (kolommen[i].getKaarten()[j].getY() + Deck.getHeightUnderlying())))
+                        if(Kolom.class.isAssignableFrom(s.getClass())) //als er een kolom is aangeklikt
                         {
-                            Kaart[] geselecteerdeKaarten = new Kaart[kolommen[i].getNKaarten() - j];
-                            System.out.println("Geselecteerde kaarten:");
-                            for(int k = 0; k < geselecteerdeKaarten.length; k++)
+                            Kolom kol = (Kolom)s;
+                            
+                            for(int j = 0; j < kol.getNKaarten(); j++)
                             {
-                                geselecteerdeKaarten[k] = kolommen[i].getKaarten()[j + k];
-                                System.out.println(geselecteerdeKaarten[k]);
+                                boolean aangeklikt = false;
+                                System.out.println("\nY aangeklikt: " + e.getY() + " en Y " + kol.getKaarten()[j] + ": " + kol.getKaarten()[j].getY());
+                                if(!kol.getKaarten()[j].equals(kol.getBovensteKaart()) && (e.getY() > kol.getKaarten()[j].getY()) && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getHeightUnderlying())) && kol.getKaarten()[j].getZichtbaar())
+                                    aangeklikt = true;
+                                else if(e.getY() > kol.getKaarten()[j].getY() && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getCardHeight())) && kol.getKaarten()[j].getZichtbaar())
+                                    aangeklikt = true;
+                                if(aangeklikt)
+                                {
+                                    vanStapel = s; //aangeklikte stapel is de eerste aangeklikte stapel
+                                    System.out.println("van " + s);
+                                    nKaartenGeselecteerd = kol.getNKaarten() - j;
+                                    System.out.println("\n" + nKaartenGeselecteerd + " kaart(en) geselecteerd");
+                                    Kaart[] gK = new Kaart[nKaartenGeselecteerd];
+                                    System.out.print("\nGeselecteerde kaarten vanuit " + this + ":");
+                                    for(int k = 0; k < nKaartenGeselecteerd; k++)
+                                    {
+                                        geselecteerdeKaarten[k] = kol.getKaarten()[j + k];
+                                        System.out.println(geselecteerdeKaarten[k]);
+                                    }
+                                    kol.setAangeklikt(true, geselecteerdeKaarten, nKaartenGeselecteerd);
+                                    break;
+                                }
                             }
+                            
+                            if(vanStapel == null)
+                            {
+                                System.out.println("\nGeen geldige kolomkaarten aangeklikt");
+                                vanStapel = null;
+                                s.setAangeklikt(false);
+                            }
+                            
+                            for(int i = 0; i < nKolommen; i++)
+                                if (!kolommen[i].equals(kol))
+                                    kolommen[i].setAangeklikt(false);
+                        }
+
+                        else if(o == aflegStapel)
+                        {
+                            vanStapel = s; //aangeklikte stapel is de eerste aangeklikte stapel
+                            System.out.println("van " + s);
+                            s.setAangeklikt(true); //aflegStapel wordt op aangeklikt gezet
+                            geselecteerdeKaarten[0] = aflegStapel.getBovensteKaart();
+                            nKaartenGeselecteerd = 1;
                         }
                     }
+                    else //als de vanStapel al gevuld is
+                        if(naarStapel == null) //als er nog geen naar Stapel is
+                        {
+                            naarStapel = s;
+                            System.out.println(" naar " + s + "\nKaarten geselecteerd: ");
+                            for(int i = 0; i < nKaartenGeselecteerd; i++)
+                            {
+                                System.out.println(geselecteerdeKaarten[i]);
+                            }
+                            boolean geldigeNaarStapel = false;
+                            
+                            if(Kolom.class.isAssignableFrom(s.getClass())) //als naarStapel een kolom is
+                            {
+                                Kolom naarKolom = (Kolom)s;
+                                System.out.println("\nnaarStapel is: " + naarKolom);
+                                legOpKolom(vanStapel, naarKolom, geselecteerdeKaarten, nKaartenGeselecteerd);
+                                geldigeNaarStapel = true;
+                            }
+                            
+                            else if(EindStapel.class.isAssignableFrom(s.getClass()))
+                            {
+                                EindStapel es = (EindStapel)s;
+                                if(nKaartenGeselecteerd == 1)
+                                    legOpEindStapel(vanStapel,es,geselecteerdeKaarten[0]);
+                                geldigeNaarStapel = true;
+                            }
+                            
+                            if(geldigeNaarStapel)
+                            {
+                                if(Kolom.class.isAssignableFrom(vanStapel.getClass())) //als vanStapel een Kolom is
+                                {
+                                    Kolom kVan = (Kolom)vanStapel;
+                                    System.out.println("\nvanStapel " + kVan + " is een kolom, dus kolom wordt juist getoond");
+                                    //kVan.toonKolomJuist();
+                                }
+
+                                if(Kolom.class.isAssignableFrom(naarStapel.getClass())) //als naarStapel een Kolom is
+                                {
+                                    Kolom kNaar = (Kolom)naarStapel;
+                                    System.out.println("\nnaarStapel " + kNaar + " is een kolom, dus kolom wordt juist getoond");
+                                    //kNaar.toonKolomJuist();
+                                }
+                            }
+                            
+                            vanStapel.setAangeklikt(false);
+                            naarStapel.setAangeklikt(false);
+                            nKaartenGeselecteerd = 0;
+                            vanStapel = null;
+                            naarStapel = null;
+                        }      
                 }
-            }
-        }
-        
-        if(aflegStapel.getAangeklikt())
-        {
-            for(int i = 0; i < Deck.getNKleuren(); i++)
-            {
-                if(eindStapels[i].getAangeklikt())
-                {
-                    legOpEindStapel(aflegStapel,eindStapels[i]);
-                    aflegStapel.setAangeklikt(false);
-                }
-                eindStapels[i].setAangeklikt(false);
             }
         }
     }
@@ -303,6 +399,12 @@ public class Patience extends JFrame implements MouseListener
     public void mouseExited(MouseEvent e)
     {
         
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Patience";
     }
     
 }
