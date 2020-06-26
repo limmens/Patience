@@ -36,15 +36,20 @@ public class Kaart extends JLabel
     int x;
     int y;
     
+    private boolean aangeklikt;
+    
     public Kaart(String kleur, String waarde, boolean zichtbaar)
     {
         this.kleur = kleur;
         this.waarde = waarde;
         this.zichtbaar = zichtbaar;
         
-        if(kleur == "Klaveren" || kleur == "Schoppen")
+        aangeklikt = false; //kaart is bij aanmaken niet aangeklikt
+        //this.setBorder(BorderFactory.createLineBorder(Color.BLACK)); //standaard kleur rand, verandert bij aangeklikt zijn in andere kleur
+        
+        if(kleur.equals("C") || kleur.equals("S"))
             kleurRZ = "Zwart";
-        else if(kleur == "Ruiten" || kleur == "Harten")
+        else if(kleur.equals("D") || kleur.equals("H"))
             kleurRZ = "Rood";
         else
             kleurRZ = "";
@@ -145,6 +150,25 @@ public class Kaart extends JLabel
     public String getWaarde()
     {
         return waarde;
+    }
+    
+    public boolean getAangeklikt()
+    {
+        return aangeklikt;
+    }
+    
+    public void setAangeklikt(boolean a)
+    {
+        aangeklikt = a;
+        if(aangeklikt)
+        {
+            System.out.println("\n" + this + " vanuit Kaart aangeklikt");
+            this.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+        }
+        else
+        {
+            this.setBorder(BorderFactory.createEmptyBorder());
+        }
     }
     
     @Override
