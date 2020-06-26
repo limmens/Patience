@@ -20,8 +20,8 @@ public final class Deck
     
     private static final int nKaarten = nKleuren * nWaarden;
     
-    private static int cardWidth = 150;
-    private static int cardHeight = 230;
+    private static int cardWidth = 111;
+    private static int cardHeight = 170;
     private static Dimension cardDimension = new Dimension(cardWidth,cardHeight);
     
     public Deck()
