@@ -51,6 +51,8 @@ public class Kolom extends Stapel
             addComponent(kaarten[i]));
             sg.addGroup(gl.createParallelGroup().
             addComponent(kaarten[i]));
+            
+            //this.setComponentZOrder(kaarten[i], i);
         }
     }
     
@@ -112,7 +114,11 @@ public class Kolom extends Stapel
             sg.addGroup(gl.createParallelGroup().
             addComponent(kaarten[i]));
             
-            this.setComponentZOrder(kaarten[i], i);
+            System.out.println("Huidige Z-order van " + kaarten[i] + ": " + this.getComponentZOrder(kaarten[i]));
+            
+            this.setComponentZOrder(kaarten[i], nKaarten - 1 - i);
+            
+            System.out.println("Nieuwe Z-order van " + kaarten[i] + ": " + this.getComponentZOrder(kaarten[i]));
         }
     }
     

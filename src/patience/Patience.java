@@ -11,7 +11,8 @@ import javax.swing.*;
 
 /**
  *to do:
- * kolommen juiste kaart boven
+ * juiste kaarten in kolommen selecteren
+ * dimension ipv height/width
  * waardes en kleuren als enum?
  * log in txt-bestand schrijven?
  * kaartenrij vervangen door list/pointer?
@@ -95,7 +96,7 @@ public class Patience extends JFrame implements MouseListener
             kolomPanel.add(kolommen[i]);
             kolommen[i].setVisible(true);
             kolommen[i].addMouseListener(this);
-            System.out.println("\n" + kolommen[i].toString());
+            System.out.println("\nAangemaakt: " + kolommen[i].toString() + "\n met de volgende kaarten:");
             kolommen[i].printStapel();
         }
         
@@ -138,6 +139,9 @@ public class Patience extends JFrame implements MouseListener
             
             System.out.print("\nTrekstapel bevat de volgende kaarten: ");
             trekStapel.printStapel();
+            
+            if(trekStapel.getNKaarten() == 0)
+                return;
             
             trekStapel.schudStapel(trekStapel.getNKaarten());
         }
@@ -279,9 +283,18 @@ public class Patience extends JFrame implements MouseListener
                             {
                                 boolean aangeklikt = false;
                                 System.out.println("\nY aangeklikt: " + e.getY() + " en Y " + kol.getKaarten()[j] + ": " + kol.getKaarten()[j].getY());
-                                if(!kol.getKaarten()[j].equals(kol.getBovensteKaart()) && (e.getY() > kol.getKaarten()[j].getY()) && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getHeightUnderlying())) && kol.getKaarten()[j].getZichtbaar())
+                                
+                                //check of op deze kaart wordt geklikt
+                                if(!kol.getKaarten()[j].equals(kol.getBovensteKaart()) //als er een andere kaart dan de bovenste wordt aangeklikt
+                                        && (e.getY() > kol.getKaarten()[j].getY()) //als er onder de bovenkant van deze kaart wordt geklikt
+                                        && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getHeightUnderlying())) //als er boven de kaart eronder wordt geklikt
+                                        && kol.getKaarten()[j].getZichtbaar()) //als de aangeklikte kaart met het plaatje naarboven ligt
                                     aangeklikt = true;
-                                else if(e.getY() > kol.getKaarten()[j].getY() && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getCardHeight())) && kol.getKaarten()[j].getZichtbaar())
+                                
+                                else if(kol.getKaarten()[j].equals(kol.getBovensteKaart()) //als de bovensteKaart wordt aangeklikt
+                                        && (e.getY() > kol.getKaarten()[j].getY()) ////als er onder de bovenkant van deze kaart wordt geklikt
+                                        && (e.getY() < (kol.getKaarten()[j].getY() + Deck.getCardHeight())) //als er tussen de boven- en onderkant van de bovenste kaart wordt geklikt
+                                        && kol.getKaarten()[j].getZichtbaar())//als de aangeklikte kaart met het plaatje naarboven ligt
                                     aangeklikt = true;
                                 if(aangeklikt)
                                 {
@@ -355,14 +368,14 @@ public class Patience extends JFrame implements MouseListener
                                 {
                                     Kolom kVan = (Kolom)vanStapel;
                                     System.out.println("\nvanStapel " + kVan + " is een kolom, dus kolom wordt juist getoond");
-                                    //kVan.toonKolomJuist();
+                                    kVan.toonKolomJuist();
                                 }
 
                                 if(Kolom.class.isAssignableFrom(naarStapel.getClass())) //als naarStapel een Kolom is
                                 {
                                     Kolom kNaar = (Kolom)naarStapel;
                                     System.out.println("\nnaarStapel " + kNaar + " is een kolom, dus kolom wordt juist getoond");
-                                    //kNaar.toonKolomJuist();
+                                    kNaar.toonKolomJuist();
                                 }
                             }
                             

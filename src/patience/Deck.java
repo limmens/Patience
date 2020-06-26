@@ -8,21 +8,20 @@ package patience;
 import java.awt.Dimension;
 
 /**
- *
  * @author Loes Immens
  */
 public final class Deck
 {
-    private static final String[] kleuren = {"C","D","S","H"};
-    private static final int nKleuren = kleuren.length;
-    private static final String[] waarden = {"A", "2", "3", "4", "5", "6", "7", "8", "9","10","J", "Q", "K"};
-    private static final int nWaarden = waarden.length;
+    private static final String[] KLEUREN = {"C","D","S","H"};
+    private static final int NKLEUREN = KLEUREN.length;
+    private static final String[] WAARDEN = {"A", "2", "3", "4", "5", "6", "7", "8", "9","10","J", "Q", "K"};
+    private static final int NWAARDEN = WAARDEN.length;
     
-    private static final int nKaarten = nKleuren * nWaarden;
+    private static final int NKAARTEN = NKLEUREN * NWAARDEN;
     
-    private static int cardWidth = 111;
-    private static int cardHeight = 170;
-    private static Dimension cardDimension = new Dimension(cardWidth,cardHeight);
+    private static final int CARDWIDTH = 100;
+    private static final int CARDHEIGHT = 150;
+    private static final Dimension CARDDIMENSION = new Dimension(CARDWIDTH,CARDHEIGHT);
     
     public Deck()
     {
@@ -31,47 +30,47 @@ public final class Deck
     
     static public Dimension getCardDimension()
     {
-        return cardDimension;
+        return CARDDIMENSION;
     }
     
     static public int getCardWidth()
     {
-        return cardWidth;
+        return CARDWIDTH;
     }
     
     static public int getCardHeight()
     {
-        return cardHeight;
+        return CARDHEIGHT;
     }
     
     static public String[] getKleuren()
     {
-        return kleuren;
+        return KLEUREN;
     }
     
     static public int getNKleuren()
     {
-        return nKleuren;
+        return NKLEUREN;
     }
     
     static public String[] getWaarden()
     {
-        return waarden;
+        return WAARDEN;
     }
     
     static public int getNWaarden()
     {
-        return nWaarden;
+        return NWAARDEN;
     }
     
     static public int getNKaarten()
     {
-        return nKaarten;
+        return NKAARTEN;
     }
     
     static public int getHeightUnderlying()
     {
-        return cardHeight / 5;
+        return CARDHEIGHT / 5;
     }
     
     public static boolean preciesEenWaardeHoger(Kaart k1, Kaart k2)
@@ -82,11 +81,11 @@ public final class Deck
         String w2 = k2.getWaarde();
         int pos1 = 0;
         int pos2 = 0;        
-        for(int i = 0; i < nWaarden; i++)
+        for(int i = 0; i < NWAARDEN; i++)
         {
-            if(w1.equals(waarden[i]))
+            if(w1.equals(WAARDEN[i]))
                 pos1 = i;
-            if(w2.equals(waarden[i]))
+            if(w2.equals(WAARDEN[i]))
                 pos2 = i;
         }
         return (pos1 - pos2 == 1);
