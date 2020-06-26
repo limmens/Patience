@@ -18,7 +18,13 @@ public class AflegStapel extends Stapel
         this.add(leegLabel);
     }
     
-    
+    @Override
+    public void setAangeklikt(boolean a)
+    {
+        aangeklikt = a;
+        if(nKaarten > 0)
+            bovensteKaart.setAangeklikt(a);
+    }
     
     @Override
     public String toString()
